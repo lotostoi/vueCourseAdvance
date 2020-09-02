@@ -1,9 +1,9 @@
 <template>
-<div class="cont-arlet">
+<transition-group class="cont-arlet" teg="div" leave-active-class="leave" enter-active-class="enter" mode="out-in">
     <div class="message" v-for="(alert,index) in alerts" :key="index+1">
         <p>{{alert.text}}</p>
     </div>
-</div>
+</transition-group>
 </template>
 
 <script>
@@ -21,6 +21,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes leave {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+}
+
+@keyframes enter {
+    from {
+        transform: translateX(-30px);
+
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.leave {
+    animation: leave 0.3s linear forwards;
+}
+
+.enter {
+    animation: enter 0.3s linear forwards;
+}
+
 .cont-arlet {
     position: fixed;
     right: 10px;
