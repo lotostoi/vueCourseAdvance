@@ -7,5 +7,19 @@ module.exports = {
 			options[0].minify = false;
 			return options;
 		});
-	} 
+	},
+/* 	configureWebpack: (config) => {
+		return {
+			devServer: {
+				proxy: {
+					'/rout': {
+						target: 'http://0.0.0.0:3000',
+						secure: false,
+						changeOrigin: true
+
+					}
+				}
+			}
+		}
+	} */
 }

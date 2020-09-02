@@ -5,12 +5,14 @@ Vue.use(Vuex);
 
 import Cart from "./cart"
 import Cotalog from "./cotalog"
+import Alerts from "./alerts"
 
 export default new Vuex.Store({
 
 	modules: {
 		cart: Cart,
-		cotalog: Cotalog
+		cotalog: Cotalog,
+		alerts: Alerts
 	},
 
 	

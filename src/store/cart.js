@@ -1,17 +1,24 @@
 
 import Vue from 'vue'
 
-import { getData } from "@/server.js"
+import * as cartApi from "@/api/cart"
 
 export default {
     namespaced: true,
+
     state: {
+
         goodsInCart: [],
+
         status: false,
+
         statusMesseg: 'Some Error',
+
         clearCartBlok: false,
+
     },
     getters: {
+
         goodsInCart: state => state.goodsInCart,
 
         checkInCart: state => id => state.goodsInCart.find(e => e.id === id),
@@ -83,16 +90,21 @@ export default {
     },
     actions: {
 
-        async getCart({ commit,state }) {
+        // get all cart
+
+        async getCart({ dispatch, commit }) {
 
             let oldToken = localStorage.getItem('CART__TOKEN')
+
             try {
-                let { cart, token, needUpdate } = await getData(`cart/load.php?token=${oldToken}`)
+
+                let { cart, token, needUpdate } = await cartApi.all(oldToken)
 
 
                 if (needUpdate) {
 
                     localStorage.setItem('CART__TOKEN', token)
+
                 }
                 commit('getCart', { token: token, data: cart })
 
@@ -101,9 +113,11 @@ export default {
 
             } catch (e) {
 
+                dispatch('alerts/add', { text: "Error by loading cart. You need to reload page" }, { root: true })
+
+         
 
                 commit('changeStatus', false)
-
 
             }
 
@@ -112,15 +126,13 @@ export default {
 
         async addCart({ commit, state, dispatch }, { id }) {
 
+            dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+            await cartApi.add(state.token, id)
 
             dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-
-            let res = await getData(`cart/add.php?token=${state.token}&id=${id}`)
-
-            dispatch('cotalog/cInProc', { id: id }, { root: true })
-
-            res && commit('addCart', id)
+            commit('addCart', id)
 
 
         },
@@ -137,11 +149,11 @@ export default {
 
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    let res = await getData(`cart/change.php?token=${state.token}&id=${id}&cnt=${++cnt}`)
+                    await cartApi.change(state.toke, id, ++cnt)
 
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    res && commit('incCart', indexInCart(id))
+                    commit('incCart', indexInCart(id))
 
                 }
 
@@ -163,24 +175,24 @@ export default {
 
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    let res = await getData(`cart/change.php?token=${state.token}&id=${id}&cnt=${--cnt}`)
+                    await cartApi.change(state.token, id, --cnt)
 
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    res ? commit('decCart', indexInCart(id)) : false
+                    commit('decCart', indexInCart(id))
                 }
 
-                // удалем из коризны
+                // удаляем из коризны
 
                 else if (cnt === 1) {
 
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
 
-                    let res = await getData(`cart/remove.php?token=${state.token}&id=${id}`)
+                    await cartApi.remove(state.token, id)
 
 
-                    res && commit('delCart', indexInCart(id))
+                    commit('delCart', indexInCart(id))
 
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
@@ -202,16 +214,11 @@ export default {
 
                 let newCnt = (isNaN(cnt) || cnt < 1) ? 1 : cnt
 
-                let res = await getData(`cart/change.php?token=${state.token}&id=${id}&cnt=${newCnt}`)
+                await cartApi.change(state.token, id, newCnt)
 
-                if (res) {
+                commit('chengCart', { index: indexInCart(id), val: false })
 
-                    commit('chengCart', { index: indexInCart(id), val: false })
-
-                    commit('chengCart', { index: indexInCart(id), val: newCnt })
-                    
-                }
-
+                commit('chengCart', { index: indexInCart(id), val: newCnt })
 
             }
 
@@ -221,11 +228,11 @@ export default {
 
             commit('clearCartBlok')
 
-            let res = await getData(`cart/clean.php?token=${state.token}`)
-            
+            await cartApi.clear(state.token)
+
             commit('clearCartBlok')
 
-            res && commit('clearCart') 
+            commit('clearCart')
 
         },
 
