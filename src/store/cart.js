@@ -3,6 +3,8 @@ import Vue from 'vue'
 
 import * as cartApi from "@/api/cart"
 
+const DALAY = 3000
+
 export default {
     namespaced: true,
 
@@ -11,8 +13,6 @@ export default {
         goodsInCart: [],
 
         status: false,
-
-        statusMesseg: 'Some Error',
 
         clearCartBlok: false,
 
@@ -75,11 +75,11 @@ export default {
         clearCart({ goodsInCart }) {
             goodsInCart.splice(0, goodsInCart.length)
         },
-        changeStatus(state, val) {
 
-            state.status = val
-
+        changeStatus(state) { 
+          state.status = !state.status
         },
+
         clearCartBlok(state) {
 
             state.clearCartBlok = !state.clearCartBlok
@@ -106,18 +106,13 @@ export default {
                     localStorage.setItem('CART__TOKEN', token)
 
                 }
+                commit('changeStatus')
                 commit('getCart', { token: token, data: cart })
-
-                commit('changeStatus', true)
 
 
             } catch (e) {
 
                 dispatch('alerts/add', { text: "Error by loading cart. You need to reload page" }, { root: true })
-
-         
-
-                commit('changeStatus', false)
 
             }
 
@@ -126,14 +121,22 @@ export default {
 
         async addCart({ commit, state, dispatch }, { id }) {
 
-            dispatch('cotalog/cInProc', { id: id }, { root: true })
+            try {
+                // blocking button
+                dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-            await cartApi.add(state.token, id)
+                await cartApi.add(state.token, id)
 
-            dispatch('cotalog/cInProc', { id: id }, { root: true })
+                dispatch('cotalog/cInProc', { id: id }, { root: true })
+                // unblocking button
+                commit('addCart', id)
 
-            commit('addCart', id)
-
+            } catch (e) {
+                // unblocking button
+                dispatch('cotalog/cInProc', { id: id }, { root: true })
+                // show message about error
+                dispatch('alerts/add', { text: "Error by adding good to cart", timeout: DALAY }, { root: true })
+            }
 
         },
 
@@ -145,7 +148,7 @@ export default {
 
             if (checkInCart(id)) {
 
-                if (cnt > 0) {
+                try {
 
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
@@ -154,6 +157,12 @@ export default {
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
                     commit('incCart', indexInCart(id))
+
+                } catch (e) {
+
+                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                    dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
 
                 }
 
@@ -173,29 +182,43 @@ export default {
 
                 if (cnt > 1) {
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                    try {
 
-                    await cartApi.change(state.token, id, --cnt)
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                        await cartApi.change(state.token, id, --cnt)
 
-                    commit('decCart', indexInCart(id))
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                        commit('decCart', indexInCart(id))
+                    } catch (e) {
+
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                        dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+
+                    }
                 }
 
                 // удаляем из коризны
 
                 else if (cnt === 1) {
+                    try {
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
 
+                        await cartApi.remove(state.token, id)
 
-                    await cartApi.remove(state.token, id)
+                        commit('delCart', indexInCart(id))
 
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+                    } catch (e) {
 
-                    commit('delCart', indexInCart(id))
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                        dispatch('alerts/add', { text: "Error by deleting good from cart", timeout: DALAY }, { root: true })
 
+                    }
 
                 }
 
@@ -210,15 +233,24 @@ export default {
 
             if (checkInCart(id)) {
 
-                let cnt = parseInt(e.target.value)
+                try {
 
-                let newCnt = (isNaN(cnt) || cnt < 1) ? 1 : cnt
+                    let cnt = parseInt(e.target.value)
 
-                await cartApi.change(state.token, id, newCnt)
+                    let newCnt = (isNaN(cnt) || cnt < 1) ? 1 : cnt
 
-                commit('chengCart', { index: indexInCart(id), val: false })
+                    await cartApi.change(state.token, id, newCnt)
 
-                commit('chengCart', { index: indexInCart(id), val: newCnt })
+                    commit('chengCart', { index: indexInCart(id), val: false })
+
+                    commit('chengCart', { index: indexInCart(id), val: newCnt })
+                } catch (e) {
+
+                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                    dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+
+                }
 
             }
 
@@ -226,13 +258,22 @@ export default {
 
         async clearCart({ commit, state }) {
 
-            commit('clearCartBlok')
+            try {
 
-            await cartApi.clear(state.token)
+                commit('clearCartBlok')
 
-            commit('clearCartBlok')
+                await cartApi.clear(state.token)
 
-            commit('clearCart')
+                commit('clearCartBlok')
+
+                commit('clearCart')
+            } catch (e) {
+
+                commit('clearCartBlok')
+
+                dispatch('alerts/add', { text: "Error by clearing of cart", timeout: DALAY }, { root: true })
+
+            }
 
         },
 
