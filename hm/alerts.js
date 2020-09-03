@@ -14,7 +14,7 @@ export default {
     },
     mutations: {
         add(state, payload) {
-
+            
             // adding object of error in the array
             state.all.push(payload)
 
@@ -24,7 +24,7 @@ export default {
         },
 
         // deleteing  object by index
-
+        
         dellByIndex(state, index) {
             state.all.splice(index, 1)
         }
@@ -37,10 +37,11 @@ export default {
             let index = commit('add', payload)
 
             if (payload.timeout) {
-                //  if the "timeout" property is defined, then we are deleting this object from the array, after <timeout> ms
+              //  if the "timeout" property is defined, then we are deleting this object from the array, after <timeout> ms
                 setTimeout(() => commit('dellByIndex', index), payload.timeout)
             }
         }
     }
 
 }
+
