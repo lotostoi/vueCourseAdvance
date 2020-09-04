@@ -53,6 +53,7 @@ export default {
         cInProc({ commit, getters }, { id }) {
 
             let { indexInGoods } = getters
+            
             commit('changeInProcessing', indexInGoods(id))
         
         }

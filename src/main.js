@@ -6,15 +6,22 @@ import router from "./router"
 
 import 'bootstrap/dist/css/bootstrap.css'
 
+
+
 store.dispatch('cotalog/getGoods')
-store.dispatch('cart/getCart')
+.finally(() => {
 
+  new Vue({
+    el: '#app',
+    render: h => h(App),
+    store,
+    router
+  })
 
-new Vue({
-  el: '#app',
-  render: h => h(App),
-  store,
-  router
 })
+
+
+
+
 
 

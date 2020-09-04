@@ -63,6 +63,9 @@ import {
 } from "bootstrap-vue";
 
 export default {
+    created() {
+        this.getCart()
+    },
     components: {
         BCard
     },
@@ -84,7 +87,8 @@ export default {
             decCart: "cart/decCart",
             incCart: "cart/incCart",
             chengCart: "cart/chengCart",
-            clear: "cart/clearCart"
+            clear: "cart/clearCart",
+            getCart: "cart/getCart"
         })
     }
 };

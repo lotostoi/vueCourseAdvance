@@ -18,27 +18,28 @@ export default {
             // adding object of error in the array
             state.all.push(payload)
 
-            // return index of added object
-            return state.all.length - 1
-
         },
 
         // deleteing  object by index
 
-        dellByIndex(state, index) {
+        dellByIndex(state, id) {
+            const index = state.all.findIndex(a => a.id === id)
             state.all.splice(index, 1)
         }
 
     },
     actions: {
-        add({ commit }, payload) {
+        add({ commit, state }, payload) {
 
-            // adding error's object and return its index
-            let index = commit('add', payload)
+            const id = Date.now()
+
+            // adding error's object 
+            commit('add', { ...payload, id: id })
 
             if (payload.timeout) {
+
                 //  if the "timeout" property is defined, then we are deleting this object from the array, after <timeout> ms
-                setTimeout(() => commit('dellByIndex', index), payload.timeout)
+                setTimeout(() => commit('dellByIndex', id), payload.timeout)
             }
         }
     }

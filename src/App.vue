@@ -24,7 +24,7 @@ import {
     mapActions
 } from "vuex";
 import AppFooter from "@/components/footer";
-import AppArlet from "@/components/arlet";
+import AppArlet from "@/components/alert";
 
 export default {
     components: {
