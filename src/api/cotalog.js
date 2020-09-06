@@ -1,10 +1,10 @@
-import { myhttp } from "@/api/http"
+import myhttp from "@/api/http"
 
 
 
 export async function all() {
 
-    let data = await myhttp('products/all.php')
+    let { data } = await myhttp('products.php')
     return data
 
 }

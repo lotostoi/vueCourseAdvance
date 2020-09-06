@@ -8,12 +8,12 @@ module.exports = {
 			return options;
 		});
 	},
-/* 	configureWebpack: (config) => {
+	configureWebpack: (config) => {
 		return {
 			devServer: {
 				proxy: {
-					'/rout': {
-						target: 'http://0.0.0.0:3000',
+					'/vue-advanced-api': {
+						target: 'http://faceprog.ru',
 						secure: false,
 						changeOrigin: true
 
@@ -21,5 +21,5 @@ module.exports = {
 				}
 			}
 		}
-	} */
+	} 
 }

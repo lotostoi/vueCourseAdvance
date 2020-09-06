@@ -63,9 +63,7 @@ import {
 } from "bootstrap-vue";
 
 export default {
-    created() {
-        this.getCart()
-    },
+
     components: {
         BCard
     },

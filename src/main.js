@@ -9,16 +9,17 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 
 store.dispatch('cotalog/getGoods')
-.finally(() => {
+  .then(() => store.dispatch('cart/getCart'),)
+  .then(() => {
 
-  new Vue({
-    el: '#app',
-    render: h => h(App),
-    store,
-    router
+    new Vue({
+      el: '#app',
+      render: h => h(App),
+      store,
+      router
+    })
+
   })
-
-})
 
 
 

@@ -1,7 +1,8 @@
-let baseURL = 'http://faceprog.ru/randomapi2/'
+import axios from 'axios';
 
+const instance = axios.create({
+    baseURL: '/vue-advanced-api/',
+    timeout: 10000
+});
 
-export function myhttp(link, method = 'get') {
-    let path = baseURL + link
-    return fetch(path, { mathod: method }).then((data) => data.json())
-}
+export default instance;

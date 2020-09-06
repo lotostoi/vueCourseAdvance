@@ -98,8 +98,9 @@ export default {
 
             try {
 
-                let { cart, token, needUpdate } = await cartApi.all(oldToken)
+                let { data: { cart, token, needUpdate } } = await cartApi.all(oldToken)
 
+                console.log(cart)
 
                 if (needUpdate) {
 
@@ -107,11 +108,15 @@ export default {
 
                 }
                 commit('changeStatus')
+
                 commit('getCart', { token: token, data: cart })
 
 
             } catch (e) {
+                commit('changeStatus')
 
+                dispatch('cotalog/blockButtons', null, { root: true })
+                
                 dispatch('alerts/add', { text: "Error by loading cart. You need to reload page" }, { root: true })
 
             }
