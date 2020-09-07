@@ -13,6 +13,12 @@
               <p>Price: ${{total.price}}</p>
             </div>
           </router-link>
+          <router-link :to="{name:'Login'}" class="login" active-class="cart-activ">
+            <a>
+              <p v-if="!user">Enter</p>
+              <p v-else>{{user.login}}</p>
+            </a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -26,15 +32,19 @@ import { BNavbar, BNavbarBrand, BNavbarNav } from "bootstrap-vue";
 
 export default {
   components: {
-    BIconCart
+    BIconCart,
   },
   data() {
     return {};
   },
 
   computed: {
-    ...mapGetters({ total: "cart/total" })
-  }
+    ...mapGetters(
+      { total: "cart/total",
+        user:"user/user"
+      
+       }),
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -65,11 +75,27 @@ export default {
     display: flex;
     padding: 5px;
     border-radius: 5px;
+    margin-left: auto;
     & > div {
       display: flex;
       flex-direction: column;
       & > p {
         margin: 0 0 0 10px;
+        padding: 0;
+        font-size: 14px;
+      }
+    }
+  }
+  & > .login {
+    display: flex;
+    padding: 5px;
+    border-radius: 5px;
+    margin-left: 20px;
+    & > a {
+      display: flex;
+      position: relative;
+      & > p {
+        margin: 0 0 0 0;
         padding: 0;
         font-size: 14px;
       }

@@ -2,6 +2,8 @@
 
 import Vue from 'vue'
 
+import router from "@/router"
+
 import * as cotalogApi from "@/api/cotalog"
 
 let addParams = {

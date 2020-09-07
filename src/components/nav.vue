@@ -8,28 +8,45 @@
         v-for="rout in menu"
         :to="{name:rout.name}"
         :key="rout.path"
-        teg="li"
+        tag="li"
       >
         <a>{{rout.name}}</a>
+      </router-link>
+      <router-link
+        v-if="user"
+        exact
+        active-class="spa-nav-link-active"
+        class="list-group-item"
+        to="/office"
+        key="offis"
+        teg="li"
+      >
+        <a>Office</a>
       </router-link>
     </ul>
   </nav>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       menu: [
         {
-          name: "Main"
+          name: "Main",
         },
         {
-          name: "Cotalog"
-        }
-      ]
+          name: "Cotalog",
+        },
+      ],
     };
-  }
+  },
+  computed: {
+    ...mapGetters({
+      user: "user/user",
+    }),
+  },
 };
 </script>
 
@@ -44,7 +61,7 @@ a {
   color: black;
   &:hover {
     text-decoration: none;
-    color:black;
+    color: black;
   }
 }
 </style>

@@ -5,11 +5,13 @@ import store from './store';
 import router from "./router"
 
 import 'bootstrap/dist/css/bootstrap.css'
+import { BCardBody } from 'bootstrap-vue';
 
 
-
+store.dispatch('user/autoLogin')
 store.dispatch('cotalog/getGoods')
   .then(() => store.dispatch('cart/getCart'),)
+ /*  .then(() => store.dispatch('user/autoLogin'),) */
   .then(() => {
 
     new Vue({
@@ -19,8 +21,7 @@ store.dispatch('cotalog/getGoods')
       router
     })
 
-  })
-
+  }).catch((err) => document.querySelector('body').innerHTML = err  ) 
 
 
 

@@ -1,9 +1,13 @@
 
 import Vue from 'vue'
 
+import router from "@/router"
+
 import * as cartApi from "@/api/cart"
 
 const DALAY = 3000
+
+const ERRORCODE = 401
 
 export default {
     namespaced: true,
@@ -76,8 +80,8 @@ export default {
             goodsInCart.splice(0, goodsInCart.length)
         },
 
-        changeStatus(state) { 
-          state.status = !state.status
+        changeStatus(state) {
+            state.status = !state.status
         },
 
         clearCartBlok(state) {
@@ -113,11 +117,22 @@ export default {
 
 
             } catch (e) {
-                commit('changeStatus')
 
-                dispatch('cotalog/blockButtons', null, { root: true })
-                
-                dispatch('alerts/add', { text: "Error by loading cart. You need to reload page" }, { root: true })
+
+                if (e.response.status === ERRORCODE) {
+
+                    dispatch('user/logOut', null, { root: true })
+
+                    router.push({ name: "Login" });
+
+                } else {
+
+                    commit('changeStatus')
+
+                    dispatch('cotalog/blockButtons', null, { root: true })
+
+                    dispatch('alerts/add', { text: "Error by loading cart. You need to reload page" }, { root: true })
+                }
 
             }
 
@@ -165,9 +180,18 @@ export default {
 
                 } catch (e) {
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                    if (e.response.status === ERRORCODE) {
 
-                    dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+                        dispatch('user/logOut', null, { root: true })
+
+                        router.push({ name: "Login" });
+
+                    } else {
+
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                        dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+                    }
 
                 }
 
@@ -196,11 +220,22 @@ export default {
                         dispatch('cotalog/cInProc', { id: id }, { root: true })
 
                         commit('decCart', indexInCart(id))
+
                     } catch (e) {
 
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                        dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+                        if (e.response.status === ERRORCODE) {
+
+                            dispatch('user/logOut', null, { root: true })
+
+                            router.push({ name: "Login" });
+
+                        } else {
+
+                            dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                            dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+                        }
 
                     }
                 }
@@ -217,11 +252,21 @@ export default {
                         commit('delCart', indexInCart(id))
 
                         dispatch('cotalog/cInProc', { id: id }, { root: true })
+
                     } catch (e) {
 
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+                        if (e.response.status === ERRORCODE) {
 
-                        dispatch('alerts/add', { text: "Error by deleting good from cart", timeout: DALAY }, { root: true })
+                            dispatch('user/logOut', null, { root: true })
+
+                            router.push({ name: "Login" });
+
+                        } else {
+
+                            dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                            dispatch('alerts/add', { text: "Error by deleting good from cart", timeout: DALAY }, { root: true })
+                        }
 
                     }
 
@@ -249,11 +294,21 @@ export default {
                     commit('chengCart', { index: indexInCart(id), val: false })
 
                     commit('chengCart', { index: indexInCart(id), val: newCnt })
+
                 } catch (e) {
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                    if (e.response.status === ERRORCODE) {
 
-                    dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+                        dispatch('user/logOut', null, { root: true })
+
+                        router.push({ name: "Login" });
+
+                    } else {
+
+                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                        dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
+                    }
 
                 }
 
@@ -272,11 +327,21 @@ export default {
                 commit('clearCartBlok')
 
                 commit('clearCart')
+
             } catch (e) {
 
-                commit('clearCartBlok')
+                if (e.response.status === ERRORCODE) {
 
-                dispatch('alerts/add', { text: "Error by clearing of cart", timeout: DALAY }, { root: true })
+                    dispatch('user/logOut', null, { root: true })
+
+                    router.push({ name: "Login" });
+
+                } else {
+
+                    commit('clearCartBlok')
+
+                    dispatch('alerts/add', { text: "Error by clearing of cart", timeout: DALAY }, { root: true })
+                }
 
             }
 
