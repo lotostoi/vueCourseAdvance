@@ -1,33 +1,72 @@
-import  myhttp  from "@/api/http"
+import myhttp from "@/api/http"
 
 
 
-export async function all(oldToken) {
+export async function all( token ) {
 
-    return await myhttp(`cart.php?token=${oldToken}`)
+    let { data } = await myhttp.get('cart.php', {
 
-}
+        params: { token },
 
-export async function add(oldToken, id) {
+        errorSuppression: { text: 'при загрузке корзины', critical: true }
 
-    return await myhttp.post(`cart.php?token=${oldToken}&id=${id}`)
+    });
 
-}
-
-export async function change(oldToken, id, cnt) {
-
-    return await myhttp.put(`cart.php?token=${oldToken}&id=${id}&cnt=${cnt}`)
+    return data;
 
 }
 
-export async function remove(oldToken, id) {
+export async function add(token, id) {
 
-    return await myhttp.delete(`cart.php?token=${oldToken}&id=${id}`)
+    let { data } = await myhttp.post('cart.php', { token, id }, {
+
+        errorSuppression: { text: 'при добавлении товара' }
+
+    });
+
+    return data;
 
 }
 
-export async function clear(oldToken) {
+export async function change(token, id, count) {
 
-    return await myhttp.delete(`cart.php?token=${oldToken}`)
+    let { data } = await myhttp.put('cart.php', { token, id, cnt: count }, { 
+
+        errorSuppression: { text: 'при изменении количества товара', exclude: [422] }
+
+    });
+
+    return data;
+
+}
+
+export async function remove(token, id) {
+
+    let { data } = await myhttp.delete('cart.php', {
+
+        params: { token, id },
+
+        errorSuppression: { text: 'при удалении товара' }
+
+    });
+
+    return data;
+
+}
+
+export async function clear(token) {
+
+
+    let { data } = await myhttp.delete('cart.php', {
+
+        params: { token },
+
+        errorSuppression: { text: 'при очистке корзины'}
+
+    });
+
+    return data;
+
+   
 
 }

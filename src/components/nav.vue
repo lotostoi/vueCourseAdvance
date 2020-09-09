@@ -10,8 +10,11 @@
         :key="rout.path"
         tag="li"
       >
+
+    
         <a>{{rout.name}}</a>
       </router-link>
+   
       <router-link
         v-if="user"
         exact

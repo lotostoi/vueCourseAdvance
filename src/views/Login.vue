@@ -59,20 +59,21 @@ export default {
 	
 	),
     async tryLogin() {
-      let login = await this.login({
+      let data = await this.login({
         login: this.authData.login,
         password: this.authData.password,
       });
 
+     // console.log(data)
      
-
-      if (login.res) {
+      if (data.res) {
+        console.log('good')
         this.authData.login = "";
         this.authData.password = "";
         this.authData.errorText = "";
         this.$router.push({ name: "office" });
       } else {
-        this.authData.errorText = login.errors.join(",");
+        this.authData.errorText = data.errors.join(",");
        
       }
     },

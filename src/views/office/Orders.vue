@@ -1,25 +1,35 @@
 <template>
   <div>
     <h1>User orders</h1>
+    <ul>
+    <li v-for = "(order,i) in orders" :key="i">Order {{order}}</li>
+    
+    
+    </ul>
   </div>
 </template>
 
 <script>
-import server from "@/api/http";
-import { mapActions } from "vuex";
+
+import { mapActions, mapGetters } from "vuex";
+
 export default {
+
   created() {
-    server.get("orders.php")
-	.then(console.log)
-	.catch(()=> {
-		this.logOut() 
-		this.$router.push({ name: "Login" });
-	});
+   this.getAll()
   },
+
   methods: {
     ...mapActions({
       logOut: "user/logOut",
+      getAll: "orders/getAll",
     }),
   },
+  computed: {
+    ...mapGetters({
+      orders: "orders/orders"
+    })
+  }
 };
+
 </script>

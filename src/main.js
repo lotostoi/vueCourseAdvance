@@ -10,10 +10,7 @@ import { BCardBody } from 'bootstrap-vue';
 
 store.dispatch('user/autoLogin')
 store.dispatch('cotalog/getGoods')
-  .then(() => store.dispatch('cart/getCart'),)
- /*  .then(() => store.dispatch('user/autoLogin'),) */
-  .then(() => {
-
+.then(() => {
     new Vue({
       el: '#app',
       render: h => h(App),
@@ -21,7 +18,9 @@ store.dispatch('cotalog/getGoods')
       router
     })
 
-  }).catch((err) => document.querySelector('body').innerHTML = err  ) 
+})
+  .catch((err) => document.querySelector('body').innerHTML = err)
+  .finally(() => store.dispatch('cart/getCart'))
 
 
 

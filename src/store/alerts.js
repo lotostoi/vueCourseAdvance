@@ -31,6 +31,8 @@ export default {
     actions: {
         add({ commit, state }, payload) {
 
+            console.log('alert')
+
             const id = Date.now()
 
             // adding error's object 

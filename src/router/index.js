@@ -52,21 +52,6 @@ const routes = [
         path: '/office',
         component: OfficeBase,
         meta: { auth: true },
-        beforeEnter : async (to, from, next) => {
-
-            await store.dispatch('user/autoLogin')
-
-            if (to.path === '/office') {
-
-                if (store.getters['user/user']) { next() }
-                else {
-                    next({ name: "Login" })
-                }
-
-            } else {
-                next()
-            }
-        },
         children: [
             {
                 name: 'office',
@@ -88,12 +73,39 @@ const routes = [
 ]
 
 
+
+
+
 const router = new VueRouter({
     mode: 'history',
     routes,
 
 })
 
+
+router.beforeEach(async (to, from, next) => {
+
+    if (to.path.includes("/office")) {
+
+        await store.getters['user/ready']
+
+        if (store.getters['user/user']) {
+
+            next()
+        }
+        else {
+
+            next({ name: "Login" })
+        }
+
+    } else {
+        next()
+    }
+
+
+
+
+})
 
 
 

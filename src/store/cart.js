@@ -100,11 +100,10 @@ export default {
 
             let oldToken = localStorage.getItem('CART__TOKEN')
 
-            try {
+            try { 
 
                 let { data: { cart, token, needUpdate } } = await cartApi.all(oldToken)
 
-                console.log(cart)
 
                 if (needUpdate) {
 
@@ -115,34 +114,20 @@ export default {
 
                 commit('getCart', { token: token, data: cart })
 
-
+ 
             } catch (e) {
-
-
-                if (e.response.status === ERRORCODE) {
-
-                    dispatch('user/logOut', null, { root: true })
-
-                    router.push({ name: "Login" });
-
-                } else {
 
                     commit('changeStatus')
 
                     dispatch('cotalog/blockButtons', null, { root: true })
-
-                    dispatch('alerts/add', { text: "Error by loading cart. You need to reload page" }, { root: true })
-                }
-
-            }
+              
+            } 
 
         },
 
 
         async addCart({ commit, state, dispatch }, { id }) {
 
-            try {
-                // blocking button
                 dispatch('cotalog/cInProc', { id: id }, { root: true })
 
                 await cartApi.add(state.token, id)
@@ -150,13 +135,6 @@ export default {
                 dispatch('cotalog/cInProc', { id: id }, { root: true })
                 // unblocking button
                 commit('addCart', id)
-
-            } catch (e) {
-                // unblocking button
-                dispatch('cotalog/cInProc', { id: id }, { root: true })
-                // show message about error
-                dispatch('alerts/add', { text: "Error by adding good to cart", timeout: DALAY }, { root: true })
-            }
 
         },
 
@@ -168,8 +146,6 @@ export default {
 
             if (checkInCart(id)) {
 
-                try {
-
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
                     await cartApi.change(state.toke, id, ++cnt)
@@ -177,23 +153,6 @@ export default {
                     dispatch('cotalog/cInProc', { id: id }, { root: true })
 
                     commit('incCart', indexInCart(id))
-
-                } catch (e) {
-
-                    if (e.response.status === ERRORCODE) {
-
-                        dispatch('user/logOut', null, { root: true })
-
-                        router.push({ name: "Login" });
-
-                    } else {
-
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
-
-                        dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
-                    }
-
-                }
 
             }
 
@@ -211,7 +170,7 @@ export default {
 
                 if (cnt > 1) {
 
-                    try {
+             
 
                         dispatch('cotalog/cInProc', { id: id }, { root: true })
 
@@ -221,30 +180,11 @@ export default {
 
                         commit('decCart', indexInCart(id))
 
-                    } catch (e) {
-
-
-                        if (e.response.status === ERRORCODE) {
-
-                            dispatch('user/logOut', null, { root: true })
-
-                            router.push({ name: "Login" });
-
-                        } else {
-
-                            dispatch('cotalog/cInProc', { id: id }, { root: true })
-
-                            dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
-                        }
-
-                    }
                 }
 
-                // удаляем из коризны
 
                 else if (cnt === 1) {
-                    try {
-
+              
                         dispatch('cotalog/cInProc', { id: id }, { root: true })
 
                         await cartApi.remove(state.token, id)
@@ -253,22 +193,6 @@ export default {
 
                         dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    } catch (e) {
-
-                        if (e.response.status === ERRORCODE) {
-
-                            dispatch('user/logOut', null, { root: true })
-
-                            router.push({ name: "Login" });
-
-                        } else {
-
-                            dispatch('cotalog/cInProc', { id: id }, { root: true })
-
-                            dispatch('alerts/add', { text: "Error by deleting good from cart", timeout: DALAY }, { root: true })
-                        }
-
-                    }
 
                 }
 
@@ -283,7 +207,6 @@ export default {
 
             if (checkInCart(id)) {
 
-                try {
 
                     let cnt = parseInt(e.target.value)
 
@@ -295,22 +218,6 @@ export default {
 
                     commit('chengCart', { index: indexInCart(id), val: newCnt })
 
-                } catch (e) {
-
-                    if (e.response.status === ERRORCODE) {
-
-                        dispatch('user/logOut', null, { root: true })
-
-                        router.push({ name: "Login" });
-
-                    } else {
-
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
-
-                        dispatch('alerts/add', { text: "Error by changing amount of goods in the cart", timeout: DALAY }, { root: true })
-                    }
-
-                }
 
             }
 
@@ -318,7 +225,6 @@ export default {
 
         async clearCart({ commit, state }) {
 
-            try {
 
                 commit('clearCartBlok')
 
@@ -328,25 +234,16 @@ export default {
 
                 commit('clearCart')
 
-            } catch (e) {
-
-                if (e.response.status === ERRORCODE) {
-
-                    dispatch('user/logOut', null, { root: true })
-
-                    router.push({ name: "Login" });
-
-                } else {
-
-                    commit('clearCartBlok')
-
-                    dispatch('alerts/add', { text: "Error by clearing of cart", timeout: DALAY }, { root: true })
-                }
-
-            }
 
         },
 
+
+    },
+
+
+     claerCartSimple({ commit }) {
+
+         commit('clearCart')
 
     }
 
