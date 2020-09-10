@@ -3,11 +3,12 @@ import * as userApi from "@/api/user"
 import router from "@/router"
 
 
+import { setTokens, getJWTPayload, getAccessToken } from "../utils/tokens"
+
+
 let autoLog
 
-let endLoad = new Promise(resolve => {
-    autoLog = resolve
-})
+let endLoad = new Promise(resolve => { autoLog = resolve })
 
 
 export default {
@@ -23,14 +24,16 @@ export default {
 
         isLogin: state => state.user !== null,
 
-        ready: () => endLoad
+        ready: () => endLoad,
+
+        checkRole: state => allowedRoles => state.user !== null && allowedRoles.some(role => state.user.roles.includes(role))
 
     },
 
     mutations: {
         setUser(state, user) {
             state.user = user
-          
+
         }
     },
 
@@ -39,11 +42,19 @@ export default {
 
             try {
 
-                let { ok , data} = await userApi.login(login, password);
+                let { ok, data } = await userApi.login(login, password);
 
-                if (ok && data) {
-                  
-                    commit('setUser', data.user);
+                if (ok && data.res) {
+
+                    // save token in localstorage
+                    setTokens(data.accessToken)
+
+                    //  picking user's data up from token
+
+                    let { login, name, roles } = getJWTPayload(data.accessToken)
+
+                    commit('setUser', { login, name, roles });
+
                 }
 
                 return data;
@@ -59,10 +70,12 @@ export default {
             try {
                 let { ok, data } = await userApi.check();
 
-                if (ok && data)  {
+                if (ok && data) {
 
-                    commit('setUser', data.user);
-         
+                    let { login, name, roles } = getJWTPayload(getAccessToken())
+
+                    commit('setUser', { login, name, roles });
+
                 } else {
                     commit('setUser', null);
                 }
@@ -72,21 +85,21 @@ export default {
                 return data;
 
             } catch (e) {
-
-               return false
               
+                console.log(e)
+
             }
 
         },
 
         async logOut({ commit, dispatch }) {
-    
+
             await userApi.logOut()
 
             commit('setUser', null)
 
         },
-      
+
     }
 
 }

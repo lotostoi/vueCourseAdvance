@@ -9,7 +9,7 @@ export async function login(login, password) {
 }
 
 export async function check() {
-    let { data } = await myhttp.get('auth/check.php', {
+    let { data } = await myhttp.get('auth/check.php?sleep', {
         errorSuppression: { check: true }
     });
     return data;

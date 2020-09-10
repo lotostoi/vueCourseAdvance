@@ -10,6 +10,7 @@
           <router-link :to="{ name: 'Good', params: { id: good.id }}">Подробнее...</router-link>
 
           <transition enter-active-class="btn-enter" leave-active-class="btn-leave" mode="out-in">
+
             <button
               v-if="checkInCart(good.id)"
               class="btn btn-info persp"
@@ -27,6 +28,7 @@
               key="add"
               :disabled="good.inProcessing"
             >Add to cart</button>
+            
           </transition>
         </section>
       </div>

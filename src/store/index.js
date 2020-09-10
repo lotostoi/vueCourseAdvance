@@ -44,6 +44,19 @@ addResponseHandler(
 	error => {
 		let es = error.config.errorSuppression;
 
+		if (error.response.status === 401 && !('check' in es)) {
+
+			store.dispatch('user/logOut')
+
+			store.dispatch['cart/clearCartSimple'] = []
+
+			store.dispatch['orders/clearOrders'] = []
+
+			return router.push({ name: 'Login' })
+
+		}
+
+
 		if (!('errorSuppression' in error.config)) {
 
 			return Promise.reject(error);
@@ -54,23 +67,11 @@ addResponseHandler(
 			return Promise.reject(error);
 		}
 
-
-		if (error.response.status === 401 && !('check' in es)) {
-
-
-
-			store.dispatch('user/logOut')
-
-			store.dispatch['cart/clearCartSimple'] = []
-			
-			store.dispatch['orders/clearOrders'] = []
-
-			return router.push({ name: 'Login' })
-
-		}
-
+		console.log('errorSup')
 
 		if ('text' in es) {
+
+			
 
 			let alert = { text: `Ошибка ответа от сервера ${es.text}` };
 
@@ -84,15 +85,9 @@ addResponseHandler(
 
 			}
 
-
-
-
 			store.dispatch('alerts/add', alert);
 
 		}
-
-
-
 
 		return { data: { ok: false } };
 	}

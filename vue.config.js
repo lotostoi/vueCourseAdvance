@@ -12,7 +12,7 @@ module.exports = {
 		return {
 			devServer: {
 				proxy: {
-					'/vue-advanced-api': {
+					'/vue-advanced-api-l3': {
 						target: 'http://faceprog.ru',
 						secure: false,
 						changeOrigin: true

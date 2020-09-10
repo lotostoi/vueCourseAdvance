@@ -87,7 +87,11 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.path.includes("/office")) {
 
+    
+
         await store.getters['user/ready']
+
+        console.log('test')
 
         if (store.getters['user/user']) {
 

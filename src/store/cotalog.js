@@ -33,14 +33,13 @@ export default {
         getGoods(state, data) {
             state.goods = data
         },
-        changeInProcessing({ goods }, index) {
+        changeInProcessing({ goods }, id) {
 
-            console.log(index)
+            let index = goods.findIndex( g => g.id.toString() === id.toString())
 
             let value = goods[index]['inProcessing']
             
-
-            Vue.set(goods[index], 'inProcessing', !value)
+            Vue.set(goods[index], 'inProcessing', !value) 
         },
         blockAllButtons (state) {
             console.log(state.goods)
@@ -60,11 +59,10 @@ export default {
 
         },
 
-        cInProc({ commit, getters }, { id }) {
+        cInProc({ commit }, { id }) {
 
-            let { indexInGoods } = getters
-
-            commit('changeInProcessing', indexInGoods(id))
+    
+            commit('changeInProcessing', id )
 
         },
 
