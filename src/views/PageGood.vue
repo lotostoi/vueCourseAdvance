@@ -28,27 +28,21 @@
 
       <hr />
 
-      <div
-        class="mb-1"
-      >Current Product Rating: {{ rating ? Math.round(rating.average*10)/10 : ''}}({{rating ? rating.count: ''}} marks)</div>
-      <div class="row" v-if="user /* && checkRole(['auditor']) */">
+      <div class="mb-1">Current Product Rating: {{ currentRating }}({{amountMarks}} marks)</div>
+      <div class="row" v-if="showRatingEdit">
         <div class="col col-2">
           <div>
-            <small>Your last mark: {{ rating && rating.your ? rating.your: '...' }}</small>
+            <small>Your last mark: {{lastMark || '...'}}</small>
           </div>
           <div>
-            <small>Your current mark: {{currentMark}}</small>
+            <small>Your current mark: {{currentMark || '...'}}</small>
           </div>
         </div>
         <div class="col col-8">
           <b-form-rating v-model="userMark"></b-form-rating>
         </div>
         <div class="col col-2">
-          <button
-            class="btn btn-primary"
-            :disabled="currentMark === lastMark"
-            @click="sendRating"
-          >Send</button>
+          <button class="btn btn-primary" :disabled="blockButton" @click="sendRating">Send</button>
         </div>
       </div>
       <hr />
@@ -70,7 +64,6 @@ import Spa404 from "@/components/404";
 import { mapGetters, mapActions } from "vuex";
 import { BFormRating } from "bootstrap-vue";
 import { getRating, sentRating } from "@/api/cotalog";
-
 
 export default {
   data() {
@@ -100,11 +93,10 @@ export default {
       res && this.gRaring();
     },
     gRaring() {
-      getRating(this.id)
-        .then((data) => {
-          this.rating = data;
-          this.lastMark = data.your || "...";
-        })
+      getRating(this.id).then((data) => {
+        this.rating = data;
+        this.lastMark = data.your;
+      });
     },
   },
   computed: {
@@ -123,7 +115,19 @@ export default {
       return this.good(this.id);
     },
     currentMark() {
-      return this.userMark === "" ? "..." : this.userMark;
+      return this.userMark === "" ? 0 : this.userMark;
+    },
+    currentRating() {
+      return this.rating ? this.rating.average.toFixed(2) : 0;
+    },
+    showRatingEdit() {
+      return this.user && this.checkRole(["auditor"]);
+    },
+    blockButton() {
+      return this.currentMark === this.lastMark || this.currentMark === 0;
+    },
+    amountMarks() {
+      return this.rating ? this.rating.count : "";
     },
   },
 };
