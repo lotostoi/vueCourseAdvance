@@ -1,4 +1,4 @@
-# vue-2020-06
+# vue-srr-simple
 
 ## Project setup
 ```
