@@ -11,14 +11,21 @@ server.use('/css', express.static(path.resolve(__dirname, './dist/css')));
 server.use('/js', express.static(path.resolve(__dirname, './dist/js')));
 server.use('/img', express.static(path.resolve(__dirname, './dist/img')));
 
-server.get('*', (req, res) => {
-	let app = serverBundle();
+server.get('*',async (req, res) => {
+
+	if (req.path === '/favicon.ico') return res.status(404).end()
+
+	let app = await serverBundle({url: req.path});
+
 	renderer.renderToString(app, (err, html) => {
+
+
 		if(err){
 			console.log(err);
 		}
 
 		res.end(html);
+
 	});
 });
 
