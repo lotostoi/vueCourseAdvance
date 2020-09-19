@@ -15,6 +15,11 @@ instance.interceptors.request.use(addAccessToken)
 instance.interceptors.response.use( 
     request => request,
     async error => {
+        
+        if (!('response' in error) || !('status' in error.response) || !('config' in error) || !('errorSuppression' in error.config)) {
+
+			return Promise.reject(error);
+		}
 
         // it isn'i error saccess
         if (error.response.status !== 401) {

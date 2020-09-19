@@ -4,17 +4,22 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vue-cli-service build",
+    "build:server": "vue-cli-service build --server --no-clean",
+    "start": "node server"
   },
   "dependencies": {
     "axios": "^0.20.0",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
     "scss-loader": "0.0.1",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-awesome": "^4.0.2",
     "vue-router": "^3.3.4",
+    "vue-server-renderer": "^2.6.12",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
@@ -23,7 +28,7 @@
     "node-sass": "^4.14.1",
     "sass-loader": "^9.0.2",
     "style-loader": "^1.2.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   },
   "browserslist": [
     "> 1%",

@@ -42,6 +42,12 @@ addResponseHandler(
 	},
 
 	error => {
+
+		if (!('response' in error) || !('status' in error.response) || !('config' in error) || !('errorSuppression' in error.config)) {
+
+			return Promise.reject(error);
+		}
+
 		let es = error.config.errorSuppression;
 
 		if (error.response.status === 401 && !('check' in es)) {
@@ -57,21 +63,18 @@ addResponseHandler(
 		}
 
 
-		if (!('errorSuppression' in error.config)) {
 
-			return Promise.reject(error);
-		}
 
 		if ('exclude' in es && es.exclude.includes(error.response.status)) {
 
 			return Promise.reject(error);
 		}
 
-		console.log('errorSup')
+
 
 		if ('text' in es) {
 
-			
+
 
 			let alert = { text: `Ошибка ответа от сервера ${es.text}` };
 
