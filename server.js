@@ -1,24 +1,36 @@
 const PORT = 3000
 
-const Vue = require('vue')
+const path = require('path')
+
+const fs = require('fs')
 
 const server = require('express')()
 
-const renderer = require('vue-server-renderer').createRenderer()
+const express = require('express')
+
+const renderer = require('vue-server-renderer').createRenderer(
+
+    {
+        template: fs.readFileSync('./dist/index.html', 'utf-8')
+    }
+
+)
 
 const serverBundle = require('./dist/js/server-bundle.js')
 
-const axios = require('axios')
 
-//serverBundle().then(app => console.log(app));
+server.use('/css',express.static(path.resolve(__dirname, './dist/css')))
+
+server.use('/js',express.static(path.resolve(__dirname, './dist/js')))
+
+server.use('/img',express.static(path.resolve(__dirname, './dist/img')))
 
 
 server.get('*', (req, res) => {
 
     serverBundle().then(app => {
 
-        console.log(app)
-
+       
         renderer.renderToString(app, (err, html) => {
 
             if (err) {
@@ -30,15 +42,9 @@ server.get('*', (req, res) => {
 
             }
 
-
-
         })
 
-
     });
-
-
-
 
 })
 

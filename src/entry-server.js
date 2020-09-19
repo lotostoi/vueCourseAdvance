@@ -11,7 +11,7 @@ const creatApp = () => {
             try {
 
                 store.dispatch('user/autoLogin')
-               await Promise.all([store.dispatch('cotalog/getGoods'), store.dispatch('cart/getCart')])
+                await store.dispatch('cotalog/getGoods')
 
                 const app = new Vue({
                     el: '#app',
@@ -20,7 +20,10 @@ const creatApp = () => {
                     router
                 })
 
+
                 resolve(app)
+
+
             } catch (e) {
 
                 reject(new Vue({

@@ -3,8 +3,9 @@ import axios from 'axios';
 import { getAccessToken, setTokens } from "@/utils/tokens"
 
 const instance = axios.create({
-    baseURL: '/vue-advanced-api-l3/',
-    timeout: 10000
+    baseURL:  'http://wp.dmitrylavrik.ru/vue-advanced-api-l3/',
+    timeout: 10000,
+    withCredentials: true
 });
 
 
@@ -15,14 +16,16 @@ instance.interceptors.request.use(addAccessToken)
 instance.interceptors.response.use( 
     request => request,
     async error => {
+   
         
-        if (!('response' in error) || !('status' in error.response) || !('config' in error) || !('errorSuppression' in error.config)) {
+        if (!('response' in error) || !(error.response)  || !('config' in error) || !('errorSuppression' in error.config)) {
 
 			return Promise.reject(error);
 		}
 
         // it isn'i error saccess
         if (error.response.status !== 401) {
+
             return Promise.reject(error)
         }
 

@@ -1,22 +1,30 @@
 const LOCAL_ACCESS_NAME = 'auth_accessToken';
 
-function setTokens(access){
-	localStorage.setItem(LOCAL_ACCESS_NAME, access);
+function setTokens(access) {
+	if (process.isClient) {
+
+		localStorage.setItem(LOCAL_ACCESS_NAME, access);
+	}
+
 }
 
-function cleanTokensData(){
-	localStorage.removeItem(LOCAL_ACCESS_NAME);
+function cleanTokensData() {
+	if (process.isClient) {
+		localStorage.removeItem(LOCAL_ACCESS_NAME);
+	}
 }
 
-function getAccessToken(){
-	return localStorage.getItem(LOCAL_ACCESS_NAME);
+function getAccessToken() {
+	if (process.isClient) {
+		return localStorage.getItem(LOCAL_ACCESS_NAME);
+	}
 }
 
-function getJWTPayload(token){
+function getJWTPayload(token) {
 	return parseJWT(token).payload;
 }
 
-function parseJWT(token){
+function parseJWT(token) {
 	let parts = token.split('.');
 
 	return {
@@ -26,7 +34,7 @@ function parseJWT(token){
 	};
 }
 
-function parsePart(str){
+function parsePart(str) {
 	return JSON.parse(atob(str));
 }
 

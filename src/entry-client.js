@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 store.dispatch('user/autoLogin')
 store.dispatch('cotalog/getGoods')
-.then(() => {
+  .then(() => {
     new Vue({
       el: '#app',
       render: h => h(App),
@@ -18,9 +18,10 @@ store.dispatch('cotalog/getGoods')
       router
     })
 
-})
+  })
   .catch((err) => document.querySelector('body').innerHTML = err)
   .finally(() => store.dispatch('cart/getCart'))
+
 
 
 

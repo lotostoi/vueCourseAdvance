@@ -43,7 +43,7 @@ addResponseHandler(
 
 	error => {
 
-		if (!('response' in error) || !('status' in error.response) || !('config' in error) || !('errorSuppression' in error.config)) {
+		if (!('response' in error) || !(error.response) || !('config' in error) || !('errorSuppression' in error.config)) {
 
 			return Promise.reject(error);
 		}
