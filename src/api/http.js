@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getAccessToken, setTokens } from "@/utils/tokens"
 
 const instance = axios.create({
-    baseURL:  'http://wp.dmitrylavrik.ru/vue-advanced-api-l3/',
+    baseURL:  'http://localhost/VueCours/',
     timeout: 10000,
     withCredentials: true
 });
