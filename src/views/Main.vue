@@ -6,14 +6,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+  created() {
+    this.$store.dispatch("title/setTitle", "Main");
+  },
+};
 </script>
 
 <style leng="scss" scoped>
 section {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 h1 {
   text-align: center;

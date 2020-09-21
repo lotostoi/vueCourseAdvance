@@ -10,7 +10,6 @@
           <router-link :to="{ name: 'Good', params: { id: good.id }}">Подробнее...</router-link>
 
           <transition enter-active-class="btn-enter" leave-active-class="btn-leave" mode="out-in">
-
             <button
               v-if="checkInCart(good.id)"
               class="btn btn-info persp"
@@ -28,7 +27,6 @@
               key="add"
               :disabled="good.inProcessing"
             >Add to cart</button>
-            
           </transition>
         </section>
       </div>
@@ -49,14 +47,18 @@ import { BCard } from "bootstrap-vue";
 export default {
   components: {
     AppProduct,
-    BCard
+    BCard,
   },
+  created() {
+    this.$store.dispatch("title/setTitle", "Catalog");
+  },
+
   computed: {
-    ...mapGetters({ goods: "cotalog/goods", checkInCart: "cart/checkInCart" })
+    ...mapGetters({ goods: "cotalog/goods", checkInCart: "cart/checkInCart" }),
   },
   methods: {
-    ...mapActions({ decCart: "cart/decCart", addCart: "cart/addCart" })
-  }
+    ...mapActions({ decCart: "cart/decCart", addCart: "cart/addCart" }),
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -87,7 +89,7 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-h1{
+h1 {
   text-align: center;
   margin: 10px;
 }
@@ -99,7 +101,7 @@ h1{
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
   display: flex;
   width: 30%;
- 
+
   flex-direction: column;
   padding: 20px 10px;
   align-items: center;
@@ -114,7 +116,7 @@ h1{
 
 a {
   display: flex;
-  width:90%;
+  width: 90%;
   margin-bottom: 10px;
 }
 

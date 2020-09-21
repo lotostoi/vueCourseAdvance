@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import store from './store';
-import router from "./router"
+import storeFunc from './store';
+import routerFunc from "./router"
 
 import 'bootstrap/dist/css/bootstrap.css'
 
 
+const store = storeFunc()
+const router = routerFunc()
 
 store.dispatch('user/autoLogin')
 store.dispatch('cotalog/getGoods')

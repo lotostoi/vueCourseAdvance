@@ -28,23 +28,18 @@ server.use('/img',express.static(path.resolve(__dirname, './dist/img')))
 
 server.get('*', (req, res) => {
 
-    let context = {url: req.url}
+    let context = {url: req.url, title: ''}
 
     serverBundle(context).then(app => {
 
-        console.log(app);
-        
-        renderer.renderToString(app, (err, html) => {
+        renderer.renderToString(app, context, (err, html) => {
 
             if (err) {
                 console.log(err)
                 res.status(500).end(err)
             } else {
-
                 res.end(html)
-
             }
-
         })
 
     }).catch(err=>console.log(err));

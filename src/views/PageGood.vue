@@ -75,6 +75,10 @@ export default {
   },
   created() {
     this.$store.getters["user/ready"].then(() => this.gRaring());
+   
+    this.$store.dispatch("title/setTitle", `${this.item.title}`);
+ 
+
   },
   components: {
     Spa404,

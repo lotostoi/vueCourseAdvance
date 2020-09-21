@@ -1,18 +1,12 @@
 
 import Vue from 'vue'
 
-import router from "@/router"
-
 import * as cartApi from "@/api/cart"
-
-const DALAY = 3000
-
-const ERRORCODE = 401
 
 export default {
     namespaced: true,
 
-    state: {
+    state: () => ({
 
         goodsInCart: [],
 
@@ -20,7 +14,7 @@ export default {
 
         clearCartBlok: false,
 
-    },
+    }),
     getters: {
 
         goodsInCart: state => state.goodsInCart,
@@ -100,7 +94,7 @@ export default {
 
             let oldToken = localStorage.getItem('CART__TOKEN')
 
-            try { 
+            try {
 
                 let { data: { cart, token, needUpdate } } = await cartApi.all(oldToken)
 
@@ -114,27 +108,27 @@ export default {
 
                 commit('getCart', { token: token, data: cart })
 
- 
+
             } catch (e) {
 
-                    commit('changeStatus')
+                commit('changeStatus')
 
-                    dispatch('cotalog/blockButtons', null, { root: true })
-              
-            } 
+                dispatch('cotalog/blockButtons', null, { root: true })
+
+            }
 
         },
 
 
         async addCart({ commit, state, dispatch }, { id }) {
 
-                dispatch('cotalog/cInProc', { id: id }, { root: true })
+            dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                await cartApi.add(state.token, id)
+            await cartApi.add(state.token, id)
 
-                dispatch('cotalog/cInProc', { id: id }, { root: true })
-                // unblocking button
-                commit('addCart', id)
+            dispatch('cotalog/cInProc', { id: id }, { root: true })
+            // unblocking button
+            commit('addCart', id)
 
         },
 
@@ -146,13 +140,13 @@ export default {
 
             if (checkInCart(id)) {
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    await cartApi.change(state.toke, id, ++cnt)
+                await cartApi.change(state.toke, id, ++cnt)
 
-                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+                dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                    commit('incCart', indexInCart(id))
+                commit('incCart', indexInCart(id))
 
             }
 
@@ -170,28 +164,28 @@ export default {
 
                 if (cnt > 1) {
 
-             
 
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                        await cartApi.change(state.token, id, --cnt)
+                    dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+                    await cartApi.change(state.token, id, --cnt)
 
-                        commit('decCart', indexInCart(id))
+                    dispatch('cotalog/cInProc', { id: id }, { root: true })
+
+                    commit('decCart', indexInCart(id))
 
                 }
 
 
                 else if (cnt === 1) {
-              
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                        await cartApi.remove(state.token, id)
+                    dispatch('cotalog/cInProc', { id: id }, { root: true })
 
-                        commit('delCart', indexInCart(id))
+                    await cartApi.remove(state.token, id)
 
-                        dispatch('cotalog/cInProc', { id: id }, { root: true })
+                    commit('delCart', indexInCart(id))
+
+                    dispatch('cotalog/cInProc', { id: id }, { root: true })
 
 
                 }
@@ -208,15 +202,15 @@ export default {
             if (checkInCart(id)) {
 
 
-                    let cnt = parseInt(e.target.value)
+                let cnt = parseInt(e.target.value)
 
-                    let newCnt = (isNaN(cnt) || cnt < 1) ? 1 : cnt
+                let newCnt = (isNaN(cnt) || cnt < 1) ? 1 : cnt
 
-                    await cartApi.change(state.token, id, newCnt)
+                await cartApi.change(state.token, id, newCnt)
 
-                    commit('chengCart', { index: indexInCart(id), val: false })
+                commit('chengCart', { index: indexInCart(id), val: false })
 
-                    commit('chengCart', { index: indexInCart(id), val: newCnt })
+                commit('chengCart', { index: indexInCart(id), val: newCnt })
 
 
             }
@@ -226,13 +220,13 @@ export default {
         async clearCart({ commit, state }) {
 
 
-                commit('clearCartBlok')
+            commit('clearCartBlok')
 
-                await cartApi.clear(state.token)
+            await cartApi.clear(state.token)
 
-                commit('clearCartBlok')
+            commit('clearCartBlok')
 
-                commit('clearCart')
+            commit('clearCart')
 
 
         },
@@ -241,9 +235,9 @@ export default {
     },
 
 
-     claerCartSimple({ commit }) {
+    claerCartSimple({ commit }) {
 
-         commit('clearCart')
+        commit('clearCart')
 
     }
 

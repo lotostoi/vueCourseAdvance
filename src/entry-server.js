@@ -1,43 +1,60 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import store from './store';
-import router from "./router"
+import craetStore from './store';
+import routerFunc from "./router"
 
+const store = craetStore()
+const router = routerFunc()
 
 const creatApp = ({ url }) => new Promise((resolve, reject) => {
 
-    router.onReady(async () => {
-    /*     try { */
-            store.dispatch('user/autoLogin')
-            await store.dispatch('cotalog/getGoods')
+    let getData = store.dispatch('cotalog/getGoods')
 
-            const app = new Vue({
+    router.onReady(async () => {
+        try {
+
+            await getData
+
+            new Vue({
                 el: '#app',
                 render: h => h(App),
                 store,
-                router
+                router,
+                created() {
+                    resolve(this)
+                }
             })
 
 
-            resolve(app)
 
-
-   /*      } catch (e) {
+        } catch (e) {
 
             const app = new Vue({
                 template: `<h1>We have following error: ${e} </h1>`
             })
             reject(app)
 
-        } */
+        }
 
     })
-    
+
     router.push(url)
 
 })
 
-export default creatApp
+export default (context) => new Promise(async res => {
+
+    const app = await creatApp(context)
+ 
+    context.rendered = () => context.title = app.$store.getters['title/title']
+
+    console.log( app.$store.getters['title/title'])
+
+    res(app)
+
+})
+
+
 
 

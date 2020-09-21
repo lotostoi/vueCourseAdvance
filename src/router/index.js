@@ -48,7 +48,7 @@ const routes = [
         path: "/login",
         component: Login
     },
-    {  ///  это решение работает, но мне не нравится что эта ссылка всегда немного тормазит даже без (sleep)
+    {  
         path: '/office',
         component: OfficeBase,
         meta: { auth: true },
@@ -73,21 +73,16 @@ const routes = [
 ]
 
 
-
-
-
-const router = new VueRouter({
+const routerFunc = () => new VueRouter({
     mode: 'history',
     routes,
 
 })
 
 
-router.beforeEach(async (to, from, next) => {
+routerFunc().beforeEach(async (to, from, next) => {
 
     if (to.path.includes("/office")) {
-
-    
 
         await store.getters['user/ready']
 
@@ -106,11 +101,8 @@ router.beforeEach(async (to, from, next) => {
         next()
     }
 
-
-
-
 })
 
 
 
-export default router
+export default routerFunc

@@ -2,8 +2,6 @@
 
 import Vue from 'vue'
 
-import router from "@/router"
-
 import * as cotalogApi from "@/api/cotalog"
 
 let addParams = {
@@ -15,11 +13,9 @@ let addParams = {
 
 export default {
     namespaced: true,
-    state: {
-        goods: [
-
-        ]
-    },
+    state: () => ({
+        goods: []
+    }),
     getters: {
         goods: state => state.goods,
         indexInGoods: state => id => state.goods.findIndex(e => e.id === id),
@@ -35,37 +31,32 @@ export default {
         },
         changeInProcessing({ goods }, id) {
 
-            let index = goods.findIndex( g => g.id.toString() === id.toString())
+            let index = goods.findIndex(g => g.id.toString() === id.toString())
 
             let value = goods[index]['inProcessing']
-            
-            Vue.set(goods[index], 'inProcessing', !value) 
+
+            Vue.set(goods[index], 'inProcessing', !value)
         },
-        blockAllButtons (state) {
-            console.log(state.goods)
+        blockAllButtons(state) {
+
             console.log('block')
-             state.goods.map(g => Vue.set(g, 'inProcessing', !g.inProcessing))
-            console.log(state.goods)
+            state.goods.map(g => Vue.set(g, 'inProcessing', !g.inProcessing))
+
         }
     },
     actions: {
         async getGoods({ commit, state }) {
 
             let data = await cotalogApi.all()
-
-            console.log(data);
-
             commit('getGoods', data.map(e => {
                 return { ...e, ...addParams }
+
             }))
 
         },
 
         cInProc({ commit }, { id }) {
-
-    
-            commit('changeInProcessing', id )
-
+            commit('changeInProcessing', id)
         },
 
         blockButtons: ({ commit }) => commit('blockAllButtons')

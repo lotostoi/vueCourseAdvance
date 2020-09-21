@@ -7,6 +7,9 @@ import Spa404 from "@/components/404"
 export default {
     components: {
         Spa404
+    },
+    created() {
+      this.$store.dispatch('title/setTitle','404')
     }
 
 }

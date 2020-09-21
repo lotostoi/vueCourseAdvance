@@ -14,10 +14,10 @@
             </div>
           </router-link>
           <router-link :to="{name:'Login'}" class="login" active-class="cart-activ">
-            <a>
+         <!--    <a> -->
               <p v-if="!user">Enter</p>
               <p v-else>{{user.login}}</p>
-            </a>
+           <!--  </a> -->
           </router-link>
         </div>
       </div>

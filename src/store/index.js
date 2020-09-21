@@ -10,18 +10,21 @@ import Cotalog from "./cotalog"
 import Alerts from "./alerts"
 import User from "./user"
 import Orders from "./orders"
+import Title from "./title"
 
 
 import { addResponseHandler } from '@/api/http';
 
-const store = new Vuex.Store({
+
+export default () => new Vuex.Store({
 
 	modules: {
 		cart: Cart,
 		cotalog: Cotalog,
 		alerts: Alerts,
 		user: User,
-		orders: Orders
+		orders: Orders,
+		title: Title,
 	},
 
 
@@ -62,19 +65,12 @@ addResponseHandler(
 
 		}
 
-
-
-
 		if ('exclude' in es && es.exclude.includes(error.response.status)) {
 
 			return Promise.reject(error);
 		}
 
-
-
 		if ('text' in es) {
-
-
 
 			let alert = { text: `Ошибка ответа от сервера ${es.text}` };
 
@@ -87,9 +83,7 @@ addResponseHandler(
 				alert.timeout = 3000;
 
 			}
-
 			store.dispatch('alerts/add', alert);
-
 		}
 
 		return { data: { ok: false } };
@@ -98,4 +92,3 @@ addResponseHandler(
 );
 
 
-export default store

@@ -1,17 +1,22 @@
 
 import * as ordersApi from "@/api/orders"
-import router from "../router"
 
 export default {
     namespaced: true,
-    state: {
+    state: () => ({
+
         orders: null
-    },
+        
+    }),
     getters: {
+
         orders: state => state.orders
+
     },
     mutations: {
+
         getOrders: (state, orders) => state.orders = orders
+
     },
     actions: {
 
@@ -20,9 +25,7 @@ export default {
             try {
 
                 let res = await ordersApi.all()
-
                 let { ok, data: { orders } } = res
-
                 commit('getOrders', orders)
 
             } catch {

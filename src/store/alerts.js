@@ -1,14 +1,14 @@
 // module for working with alerts
 
 
-export default {
+export default  {
 
     namespaced: true,
 
-    state: {
+    state: () => ({
         // array of all alerts
         all: []
-    },
+    }),
     getters: {
         all: state => state.all
     },

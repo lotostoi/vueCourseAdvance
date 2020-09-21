@@ -1,8 +1,5 @@
 import * as userApi from "@/api/user"
 
-import router from "@/router"
-
-
 import { setTokens, getJWTPayload, getAccessToken } from "../utils/tokens"
 
 
@@ -14,9 +11,11 @@ let endLoad = new Promise(resolve => { autoLog = resolve })
 export default {
     namespaced: true,
 
-    state: {
+    state:()=> ({
+
         user: null
-    },
+        
+    }),
 
     getters: {
 
