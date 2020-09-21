@@ -7,10 +7,8 @@ import router from "./router"
 
 const creatApp = ({ url }) => new Promise((resolve, reject) => {
 
-    
-
     router.onReady(async () => {
-        try {
+    /*     try { */
             store.dispatch('user/autoLogin')
             await store.dispatch('cotalog/getGoods')
 
@@ -25,14 +23,14 @@ const creatApp = ({ url }) => new Promise((resolve, reject) => {
             resolve(app)
 
 
-        } catch (e) {
+   /*      } catch (e) {
 
             const app = new Vue({
                 template: `<h1>We have following error: ${e} </h1>`
             })
             reject(app)
 
-        }
+        } */
 
     })
     

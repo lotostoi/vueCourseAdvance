@@ -53,6 +53,8 @@ export default {
 
             let data = await cotalogApi.all()
 
+            console.log(data);
+
             commit('getGoods', data.map(e => {
                 return { ...e, ...addParams }
             }))

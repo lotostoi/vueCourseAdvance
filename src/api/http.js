@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getAccessToken, setTokens } from "@/utils/tokens"
 
 const instance = axios.create({
-    baseURL:  'http://localhost/VueCours/',
+    baseURL:  'http://localhost/VueCourse/',
     timeout: 10000,
     withCredentials: true
 });
@@ -16,7 +16,7 @@ instance.interceptors.request.use(addAccessToken)
 instance.interceptors.response.use( 
     request => request,
     async error => {
-   
+        console.log(error);
         
         if (!('response' in error) || !(error.response)  || !('config' in error) || !('errorSuppression' in error.config)) {
 
