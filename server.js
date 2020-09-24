@@ -21,7 +21,7 @@ const serverBundle = require('./dist/js/server-bundle.js')
 
 server.use('/css',express.static(path.resolve(__dirname, './dist/css')))
 
-server.use('/js',express.static(path.resolve(__dirname, './dist/js')))
+//server.use('/js',express.static(path.resolve(__dirname, './dist/js')))
 
 server.use('/img',express.static(path.resolve(__dirname, './dist/img')))
 

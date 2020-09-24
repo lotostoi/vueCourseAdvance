@@ -1,20 +1,37 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import craetStore from './store';
+import createStore from './store';
 import routerFunc from "./router"
+import createHttp from "@/utils/http"
+import createApi from "@/api/index"
+import interceptor from "@/utils/interceptor"
 
-const store = craetStore()
-const router = routerFunc()
 
-const creatApp = ({ url }) => new Promise((resolve, reject) => {
 
-    let getData = store.dispatch('cotalog/getGoods')
+const createApp = ({ url }) => new Promise(async (resolve, reject) => {
+
+    let http = createHttp()
+    let api = createApi(http)
+    const store = createStore(api)
+    const router = routerFunc(store)
+
+    interceptor(store, router, http)
+
+    store.dispatch('user/autoLogin')
+    let getData = await store.dispatch('cotalog/getGoods')
+
+  
+
+
+   store.getters['cotalog/goods'].forEach(good => router.getMatchedComponents(`/cotalog/${good.id}`)[0].waite(store, good.id))
+      
+    
 
     router.onReady(async () => {
         try {
 
-            await getData
+           // await getData
 
             new Vue({
                 el: '#app',
@@ -22,11 +39,10 @@ const creatApp = ({ url }) => new Promise((resolve, reject) => {
                 store,
                 router,
                 created() {
+                    //this.$store.getters['cotalog/goods'].forEach(good => console.log(router.getMatchedComponents(`/cotalog/${good.id}`)[0].waite(store, good.id)))
                     resolve(this)
                 }
             })
-
-
 
         } catch (e) {
 
@@ -45,11 +61,11 @@ const creatApp = ({ url }) => new Promise((resolve, reject) => {
 
 export default (context) => new Promise(async res => {
 
-    const app = await creatApp(context)
- 
+    const app = await createApp(context)
+
     context.rendered = () => context.title = app.$store.getters['title/title']
 
-    console.log( app.$store.getters['title/title'])
+ 
 
     res(app)
 

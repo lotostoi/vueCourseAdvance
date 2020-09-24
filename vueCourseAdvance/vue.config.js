@@ -22,16 +22,6 @@ let configWebpack = isServer ?
 		optimization: {
 			minimize: false
 		},
-		/*  devServer: {
-			proxy: {
-				'/vue-advanced-api-l3/': {
-					target: 'https://wp.dmitrylavrik.ru',
-					secure: false,
-					changeOrigin: true
-
-				}
-			}
-		}  */
 	}
 
 
@@ -65,7 +55,18 @@ module.exports = {
 	},
 	configureWebpack: (config) => {
 		return {
-			...configWebpack,		
+			...
+			configWebpack,
+			devServer: {
+				proxy: {
+					'/vue-advanced-api-l3': {
+						target: 'http://wp.dmitrylavrik.ru',
+						secure: false,
+						changeOrigin: true
+
+					}
+				}
+			}
 		}
 	}
 }

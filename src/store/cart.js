@@ -1,20 +1,20 @@
 
 import Vue from 'vue'
+import cart from '../api/cart'
 
-import * as cartApi from "@/api/cart"
+//import * as cartApi from "@/api/cart"
 
-export default {
+export default cartApi => ({
+
     namespaced: true,
-
-    state: () => ({
-
+    state: {
         goodsInCart: [],
 
         status: false,
 
         clearCartBlok: false,
 
-    }),
+    },
     getters: {
 
         goodsInCart: state => state.goodsInCart,
@@ -88,11 +88,13 @@ export default {
     },
     actions: {
 
+
         // get all cart
 
         async getCart({ dispatch, commit }) {
 
             let oldToken = localStorage.getItem('CART__TOKEN')
+
 
             try {
 
@@ -230,15 +232,16 @@ export default {
 
 
         },
+        claerCartSimple({ commit }) {
 
+            commit('clearCart')
 
-    },
+        }
 
-
-    claerCartSimple({ commit }) {
-
-        commit('clearCart')
 
     }
 
-}
+
+
+
+})

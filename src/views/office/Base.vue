@@ -1,21 +1,28 @@
 <template>
-  <div class="cont">
-    <div class="nav">
-      <router-link tag="p" class="links" :to="{name: 'office'}">
-        <a>Main screen</a>
-      </router-link>
-      <router-link tag="p" class="links" :to="{name: 'office-orders'}">
-        <a>Orders history</a>
-      </router-link>
+  <wrapp>
+    <div class="cont">
+      <div class="nav">
+        <router-link tag="p" class="links" :to="{name: 'office'}">
+          <a>Main screen</a>
+        </router-link>
+        <router-link tag="p" class="links" :to="{name: 'office-orders'}">
+          <a>Orders history</a>
+        </router-link>
+      </div>
+      <div class="col col-9">
+        <router-view></router-view>
+      </div>
     </div>
-    <div class="col col-9">
-      <router-view></router-view>
-    </div>
-  </div>
+  </wrapp>
 </template>
 
 <script>
-export default {};
+import wrapp from "@/components/wrapper";
+export default {
+  components: {
+    wrapp,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

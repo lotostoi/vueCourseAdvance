@@ -1,14 +1,14 @@
-import myhttp from "@/api/http"
+export default myhttp => ({
+    async all() {
 
-export async function all() {
+        let { data } = await myhttp.get('orders.php', {
 
-    let { data } = await myhttp.get('orders.php', {
+            errorSuppression: { text: 'при разлогинивании' }
 
-        errorSuppression: { text: 'при разлогинивании' }
+        });
 
-    });
-    
-    return data;
+        return data;
 
-}
+    }
+})
 

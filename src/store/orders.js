@@ -1,13 +1,13 @@
 
-import * as ordersApi from "@/api/orders"
+//import * as ordersApi from "@/api/orders"
 
-export default {
+export default ordersApi => ({
     namespaced: true,
-    state: () => ({
+    state: {
 
         orders: null
-        
-    }),
+
+    },
     getters: {
 
         orders: state => state.orders
@@ -36,10 +36,10 @@ export default {
 
         },
 
-        claerOrders({ commit }) { 
+        claerOrders({ commit }) {
 
-            commit('getOrders',null)
+            commit('getOrders', null)
 
         }
     }
-}
+})

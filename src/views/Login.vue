@@ -57,23 +57,21 @@ export default {
       logOut: "user/logOut",
     }),
     async tryLogin() {
-      console.log(process.isClient)
-      if (process.isClient) {
-        let data = await this.login({
-          login: this.authData.login,
-          password: this.authData.password,
-        });
+    
+      let data = await this.login({
+        login: this.authData.login,
+        password: this.authData.password,
+      });
 
-      //  console.log(data);
+   
 
-        if (data.res) {
-          this.authData.login = "";
-          this.authData.password = "";
-          this.authData.errorText = "";
-          this.$router.push({ name: "office" });
-        } else {
-          this.authData.errorText = data.errors.join(",");
-        }
+      if (data.res) {
+        this.authData.login = "";
+        this.authData.password = "";
+        this.authData.errorText = "";
+        this.$router.push({ name: "office" });
+      } else {
+        this.authData.errorText = data.errors.join(",");
       }
     },
   },

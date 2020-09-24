@@ -63,49 +63,53 @@
 import Spa404 from "@/components/404";
 import { mapGetters, mapActions } from "vuex";
 import { BFormRating } from "bootstrap-vue";
-import { getRating, sentRating } from "@/api/cotalog";
+import axios from "axios"
 
 export default {
-  data() {
-    return {
-      userMark: "",
-      rating: null,
-      lastMark: null,
-    };
-  },
-  created() {
-    this.$store.getters["user/ready"].then(() => this.gRaring());
-   
-    this.$store.dispatch("title/setTitle", `${this.item.title}`);
- 
-
-  },
   components: {
     Spa404,
     BFormRating,
   },
+  async waite(store, id) {
+   
+   await store.dispatch("cotalog/loadRating", id);
 
+  //  let res = await axios('https://wp.dmitrylavrik.ru/vue-advanced-api-l3/ratings.php?id=105')
+  //  console.log(res) 
+  },
+  data() {
+    return {
+      userMark: "",
+      //  rating: null,
+      lastMark: null,
+    };
+  },
+
+  created() {
+    //this.$store.getters["user/ready"].then(() => this.gRaring());
+
+    this.$store.dispatch("title/setTitle", `${this.item.title}`);
+  },
   methods: {
     ...mapActions({
       decCart: "cart/decCart",
       addCart: "cart/addCart",
       alert: "alerts/add",
+      getRating: "cotalog/loadRating",
     }),
     async sendRating() {
       let res = await sentRating(this.id, this.userMark);
 
       res && this.gRaring();
     },
-    gRaring() {
-      getRating(this.id).then((data) => {
-        this.rating = data;
-        this.lastMark = data.your;
-      });
+    async gRaring() {
+      await this.getRating(this.id);
     },
   },
   computed: {
     ...mapGetters({
       goods: "cotalog/goods",
+      rating: "cotalog/rating",
       good: "cotalog/getGood",
       checkInCart: "cart/checkInCart",
       checkRole: "user/checkRole",
