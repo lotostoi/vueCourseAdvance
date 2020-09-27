@@ -17,7 +17,8 @@ function cleanTokensData() {
 function getAccessToken() {
 	if (process.isClient) {
 		return localStorage.getItem(LOCAL_ACCESS_NAME);
-	}
+	} 
+	return null
 }
 
 function getJWTPayload(token) {

@@ -8,8 +8,11 @@ export default myhttp => ({
 
     async getRating(id) {
 
-        let { data } = await myhttp('ratings.php', { params: { id } }, { errorSuppression: { text: 'при отправке рейтинга. Повторите действие, если ошибка повториться, отбратитесь в слушжбу поддержки...' }} )
-        console.log(data)
+        let { data } = await myhttp('ratings.php', {
+            params: { id },
+            errorSuppression: { text: 'при получении рейтинга товара' }
+        } )
+       
         return data
 
     },

@@ -74,8 +74,8 @@ export default {
    
    await store.dispatch("cotalog/loadRating", id);
 
-  //  let res = await axios('https://wp.dmitrylavrik.ru/vue-advanced-api-l3/ratings.php?id=105')
-  //  console.log(res) 
+   console.log('111111111111111111')
+
   },
   data() {
     return {
@@ -86,7 +86,7 @@ export default {
   },
 
   created() {
-    //this.$store.getters["user/ready"].then(() => this.gRaring());
+   
 
     this.$store.dispatch("title/setTitle", `${this.item.title}`);
   },

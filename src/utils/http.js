@@ -31,7 +31,7 @@ export default () => {
 
     instance.interceptors.response.use(
         request => {
-            console.log(request)
+          
             return request},
 
         async error => {

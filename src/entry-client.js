@@ -18,10 +18,7 @@ interceptor(store, router, http)
 
 store.dispatch('user/autoLogin')
 store.dispatch('cotalog/getGoods')
-  .then(() => {
-    store.getters['cotalog/goods']
-      .forEach(good => router.getMatchedComponents(`/cotalog/${good.id}`)[0].waite(store, good.id))
-  })
+
   .then(() => {
     new Vue({
       el: '#app',

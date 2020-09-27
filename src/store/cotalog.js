@@ -65,14 +65,14 @@ export default cotalogApi => ({
         },
         async loadRating({ state, commit }, id) {
 
-            let data = await cotalogApi.getRating(id)
+            let { ok, data } = await cotalogApi.getRating(id);
 
-            console.log(data)
+            if (ok) {
+                commit('setRating', { average: data.average, count: data.count });
+                return data;
+            }
 
-            commit('setRating', { average: data.average, count: data.count })
-            console.log(state)
-            return data
-
+            return { average: 0, count: 0, your: null };
 
         },
 

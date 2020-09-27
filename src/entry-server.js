@@ -19,19 +19,12 @@ const createApp = ({ url }) => new Promise(async (resolve, reject) => {
     interceptor(store, router, http)
 
     store.dispatch('user/autoLogin')
-    let getData = await store.dispatch('cotalog/getGoods')
-
-  
-
-
-   store.getters['cotalog/goods'].forEach(good => router.getMatchedComponents(`/cotalog/${good.id}`)[0].waite(store, good.id))
-      
-    
+    let getData = store.dispatch('cotalog/getGoods')
 
     router.onReady(async () => {
         try {
 
-           // await getData
+            await getData
 
             new Vue({
                 el: '#app',
@@ -39,8 +32,7 @@ const createApp = ({ url }) => new Promise(async (resolve, reject) => {
                 store,
                 router,
                 created() {
-                    //this.$store.getters['cotalog/goods'].forEach(good => console.log(router.getMatchedComponents(`/cotalog/${good.id}`)[0].waite(store, good.id)))
-                    resolve(this)
+                    resolve({ app: this, store, router })
                 }
             })
 
@@ -61,13 +53,17 @@ const createApp = ({ url }) => new Promise(async (resolve, reject) => {
 
 export default (context) => new Promise(async res => {
 
-    const app = await createApp(context)
+    const { app, store, router } = await createApp(context)
 
     context.rendered = () => context.title = app.$store.getters['title/title']
 
- 
+    let { params } = router.currentRoute
 
-    res(app)
+    Promise.all(
+        router.getMatchedComponents().filter(cmp => cmp.waite).map(cmp => cmp.waite(store, params))
+    ).then(() => res(app))
+
+
 
 })
 
