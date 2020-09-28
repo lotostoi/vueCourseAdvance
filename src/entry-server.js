@@ -8,60 +8,69 @@ import createApi from "@/api/index"
 import interceptor from "@/utils/interceptor"
 
 
+import 'bootstrap/dist/css/bootstrap.css'
+//import 'bootstrap-vue/dist/css/bootstrap-vue.css'
 
 const createApp = ({ url }) => new Promise(async (resolve, reject) => {
 
-    let http = createHttp()
-    let api = createApi(http)
-    const store = createStore(api)
-    const router = routerFunc(store)
+  let http = createHttp()
+  let api = createApi(http)
+  const store = createStore(api)
+  const router = routerFunc(store)
 
-    interceptor(store, router, http)
+  interceptor(store, router, http)
 
-    store.dispatch('user/autoLogin')
-    let getData = store.dispatch('cotalog/getGoods')
+  store.dispatch('user/autoLogin')
+  let getData = store.dispatch('cotalog/getGoods')
 
-    router.onReady(async () => {
-        try {
+  router.onReady(async () => {
+    try {
 
-            await getData
+      await getData
 
-            new Vue({
-                el: '#app',
-                render: h => h(App),
-                store,
-                router,
-                created() {
-                    resolve({ app: this, store, router })
-                }
-            })
-
-        } catch (e) {
-
-            const app = new Vue({
-                template: `<h1>We have following error: ${e} </h1>`
-            })
-            reject(app)
-
+      new Vue({
+        el: '#app',
+        render: h => h(App),
+        store,
+        router,
+        created() {
+          resolve({ app: this, store, router, error: null })
         }
+      })
 
-    })
+    } catch (e) {
 
-    router.push(url)
+      const app = new Vue({
+        template: `<h1>We have following error: ${e} </h1>`
+      })
+      reject(resolve({ app, store, router, error: 500 }))
+
+    }
+
+  })
+
+  router.push(url)
 
 })
 
 export default (context) => new Promise(async res => {
 
-    const { app, store, router } = await createApp(context)
+  const { app, store, router } = await createApp(context)
 
-    context.rendered = () => context.title = app.$store.getters['title/title']
+  context.rendered = () => {
+    context.title = store.getters['title/title']
+    context.state = store.state
+  }
 
-    let { params } = router.currentRoute
+  let { params } = router.currentRoute
 
-    Promise.all(
-        router.getMatchedComponents().filter(cmp => cmp.waite).map(cmp => cmp.waite(store, params))
-    ).then(() => res(app))
+  Promise.all(
+    router.getMatchedComponents().filter(cmp => cmp.waite).map(cmp => cmp.waite(store, params.id))
+  ).then(() => {
+    let routers = router.getMatchedComponents()
+    let error = router.length === 0  || (('components' in routers[0]) && ('Spa404' in routers[0].components)) ? 404 :null 
+    res({app, error :error})
+  })
 
 
 

@@ -63,7 +63,7 @@
 import Spa404 from "@/components/404";
 import { mapGetters, mapActions } from "vuex";
 import { BFormRating } from "bootstrap-vue";
-import axios from "axios"
+
 
 export default {
   components: {
@@ -71,24 +71,21 @@ export default {
     BFormRating,
   },
   async waite(store, id) {
-   
-   await store.dispatch("cotalog/loadRating", id);
-
-   console.log('111111111111111111')
+ 
+  let data = await store.dispatch("cotalog/loadRating", id);
 
   },
   data() {
     return {
       userMark: "",
-      //  rating: null,
       lastMark: null,
     };
   },
 
   created() {
-   
-
+    this.$store.dispatch("cotalog/loadRating", this.id);
     this.$store.dispatch("title/setTitle", `${this.item.title}`);
+     
   },
   methods: {
     ...mapActions({
@@ -98,12 +95,16 @@ export default {
       getRating: "cotalog/loadRating",
     }),
     async sendRating() {
-      let res = await sentRating(this.id, this.userMark);
+
+     
+      let res = await this.$root.$options.api.cotalog.sentRating(this.id, this.userMark);
 
       res && this.gRaring();
     },
     async gRaring() {
-      await this.getRating(this.id);
+     let res = await this.getRating(this.id);
+  
+     this.lastMark = res.your
     },
   },
   computed: {
