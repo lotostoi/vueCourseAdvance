@@ -65,6 +65,7 @@ export default store => {
                 }
             ]
         },
+     
         {
             name: '404',
             path: "*",

@@ -1,5 +1,7 @@
 const PORT = 3000
 
+const Vue = require('vue')
+
 const path = require('path')
 
 const fs = require('fs')
@@ -24,7 +26,7 @@ const serverBundle = require('./dist/js/server-bundle.js')
 
 server.use('/css', express.static(path.resolve(__dirname, './dist/css')))
 
-server.use('/js', express.static(path.resolve(__dirname, './dist/js')))
+//server.use('/js', express.static(path.resolve(__dirname, './dist/js')))
 
 server.use('/img', express.static(path.resolve(__dirname, './dist/img')))
 
@@ -37,12 +39,32 @@ const blokedPathes = [
 
 server.get('*', (req, res) => {
 
-	if (req.url in blokedPathes) return
-
 	if (pagesCache.has(req.url)) {
 
 		console.log('form Cache');
 		return res.end(pagesCache.get(req.url))
+	}
+
+	if (blokedPathes.find(p => p === req.url)) {
+
+		return res.end(
+			`<!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width,initial-scale=1.0">
+			<!--  <link rel="icon" href="<%= BASE_URL %>icon.svg"> -->
+			<title>Loading...</title>
+			</head>
+			<body> 
+			<div id="app">
+				Loading...
+			</div>
+			</body>
+			</html>`
+		)
+
 	}
 
 	let context = { url: req.url, title: '' }
